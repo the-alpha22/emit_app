@@ -1,10 +1,9 @@
 import 'package:emit_app/constants/constants.dart';
-import 'package:emit_app/controllers/data_page_controller.dart';
 import 'package:emit_app/navigation_bars.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class DataPage extends StatefulWidget {
   const DataPage({Key? key});
@@ -47,61 +46,73 @@ class _DataPageState extends State<DataPage> {
           padding: const EdgeInsets.all(12.0),
           child: Column(
             children: [
-              FutureBuilder<List<dynamic>>(
-                future: DataController.instance.fetchData(startDateparse),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  }
-                  List<dynamic>? data = snapshot.data;
-                  if (data!.isEmpty) {
-                    return Center(
-                        child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(
-                          height: 100,
-                        ),
-                        SvgPicture.asset(
-                          'images/not found.svg',
-                          height: MediaQuery.of(context).size.width * 0.75,
-                        ),
-                        Text(
-                          "Nothing found",
-                          style: GoogleFonts.montserrat(
-                              color: Colors.black.withOpacity(0.6),
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15),
-                        ),
-                      ],
-                    ));
-                  }
-                  return GridView(
-                    shrinkWrap: true,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 2,
-                      crossAxisSpacing: 2,
-                      childAspectRatio: 0.55,
-                    ),
-                    children: data.map((dataDetail) {
-                      return Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(4),
-                            border:
-                                Border.all(color: primaryColor, width: 0.5)),
-                        child: Text("${dataDetail["title"]}"),
-                      );
-                    }).toList(),
-                  );
-                },
+              Center(
+                child: Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  child: const HtmlWidget(
+                    '''
+        <iframe width="100%" height="70%" src="https://search.earthdata.nasa.gov/search/granules/"></iframe>
+        ''',
+                  ),
+                ),
               ),
+              //eliminating coz require api documentation
+              // FutureBuilder<List<dynamic>>(
+              //   future: DataController.instance.fetchData(startDateparse),
+              //   builder: (context, snapshot) {
+              //     if (snapshot.connectionState == ConnectionState.waiting) {
+              //       return const Center(child: CircularProgressIndicator());
+              //     } else if (snapshot.hasError) {
+              //       return Text('Error: ${snapshot.error}');
+              //     }
+              //     List<dynamic>? data = snapshot.data;
+              //     if (data!.isEmpty) {
+              //       return Center(
+              //           child: Column(
+              //         mainAxisSize: MainAxisSize.min,
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         crossAxisAlignment: CrossAxisAlignment.center,
+              //         children: [
+              //           const SizedBox(
+              //             height: 100,
+              //           ),
+              //           SvgPicture.asset(
+              //             'images/not found.svg',
+              //             height: MediaQuery.of(context).size.width * 0.75,
+              //           ),
+              //           Text(
+              //             "Nothing found",
+              //             style: GoogleFonts.montserrat(
+              //                 color: Colors.black.withOpacity(0.6),
+              //                 fontWeight: FontWeight.w500,
+              //                 fontSize: 15),
+              //           ),
+              //         ],
+              //       ));
+              //     }
+              //     return GridView(
+              //       shrinkWrap: true,
+              //       gridDelegate:
+              //           const SliverGridDelegateWithFixedCrossAxisCount(
+              //         crossAxisCount: 2,
+              //         mainAxisSpacing: 2,
+              //         crossAxisSpacing: 2,
+              //         childAspectRatio: 0.55,
+              //       ),
+              //       children: data.map((dataDetail) {
+              //         return Container(
+              //           decoration: BoxDecoration(
+              //               color: Colors.white,
+              //               borderRadius: BorderRadius.circular(4),
+              //               border:
+              //                   Border.all(color: primaryColor, width: 0.5)),
+              //           child: Text("${dataDetail["title"]}"),
+              //         );
+              //       }).toList(),
+              //     );
+              //   },
+              // ),
             ],
           ),
         ),
